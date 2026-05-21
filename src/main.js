@@ -7,19 +7,15 @@ import { UsersApp } from './users/users-app';
 
 
 document.querySelector('#app').innerHTML = `
-<section id="center">
+
   <div class="hero">
-    <img src="${heroImg}" class="base" width="100" height="159">
     <img src="${javascriptLogo}" class="framework" alt="JavaScript logo"/>
     <img src="${viteLogo}" class="vite" alt="Vite logo" />
   </div>
   <h2 id="app-title">Get started</h2>
-  
   <div class="card">
     
   </div>
-  
-</section>
 `;
 
 // selecciona elemento html 
