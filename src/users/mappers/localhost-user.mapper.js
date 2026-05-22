@@ -5,7 +5,7 @@ import { User } from '../models/user';
 // al model user de la aplicación
 
 // func que requiere el modelo de usuario de la BD, en localhost y
-// retorna una instancia de nuetro modelo de usuario
+// retorna una instancia de nuestro modelo de usuario
 export const localhostUserToModel = ( localhostUser ) => {
 
     // desestructurar el objeto que viene en localhostUser

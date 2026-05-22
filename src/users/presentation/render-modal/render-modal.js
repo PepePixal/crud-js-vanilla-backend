@@ -25,10 +25,11 @@ export const hideModal = () => {
 
 
 /**
- * Renderiza la ventana modal
- * @param {HTMLDivElement} element 
+ * Renderiza la ventana modal y agrega user a la BD con el callback
+ * @param {HTMLDivElement} element
+ * @param {(userLike)=>Promise} callback 
  */
-export const renderModal = ( element ) => {
+export const renderModal = ( element, callback ) => {
 
     //si ya existe una ventana modal creada, retorna
     if ( modal ) return;
@@ -42,7 +43,7 @@ export const renderModal = ( element ) => {
     //selecciona el div form del div modal
     form = modal.querySelector('form');
 
-    //listener para cerra el modal '.modal-container'
+    //listener para cerrar el modal '.modal-container'
     modal.addEventListener( 'click', ( event ) => {        
         //si el elemento html que dispara el evento,
         //contiene la class modal-container
@@ -53,7 +54,7 @@ export const renderModal = ( element ) => {
     });
 
     // listener al envio del formulario (cuando se pulsa el botón save)
-    form.addEventListener( 'submit', (event) => {
+    form.addEventListener( 'submit', async(event) => {
         //prevenir el comportamiento por defecto del evento, 
         //enviar el formulario posteado en la url del navegador y refresco web.
         event.preventDefault();
@@ -94,14 +95,18 @@ export const renderModal = ( element ) => {
             userLike[key] = value;
         };
 
-        console.log(userLike);
-        // todo guardar el nuevo usuario
+        // console.log(userLike);
+        
+        // llama la func callback recibida como argumento en callback,
+        // enviandole el userLike (objeto nuevo usuario)
+        await callback( userLike );
 
         // ocultar y resetear el modal
         hideModal();
 
     });
 
+    // mostrar el modal en el elemento html
     element.append( modal );
 
 };
