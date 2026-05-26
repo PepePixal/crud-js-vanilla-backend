@@ -44,8 +44,36 @@ const loadPreviusPage = async() => {
 
 };
 
-const onUserChanged = () => {
-    throw new Error( 'No implementado');
+
+/**
+ * Cuando haya un cambio en un usuario, crea nuevo arreglo de users storaje
+ * @param {User} updatedUser 
+ */
+const onUserChanged = ( updatedUser ) => {
+
+    // def. bandera
+    let wasFound = false;
+    
+    // mapea el arreglo de usuarios y genera un nuevo arreglo .users,
+    // según la condición por cada usuario:
+    state.users = state.users.map( user => {
+        // si el id de usuario es = al id del usuario actualizado recibido
+        if ( user.id === updatedUser.id ) {
+            // bandera encontrado a true
+            wasFound = true;
+            // retorna el usuario actualizado recibido
+            return updatedUser;
+        }
+        // de lo contrario, retorna el usuario ya existente
+        return user; 
+    });
+
+    // En caso de que tengamos menos de 10 usuarios en la página del state.users,
+    // y el usuario actualizado no esté, tendremos que insertarlo
+    if ( state.users.length < 10 && !wasFound ) {
+        state.users.push( updatedUser );
+    };
+
 };
 
 const reloadPage = async() => {

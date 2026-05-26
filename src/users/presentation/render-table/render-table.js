@@ -1,4 +1,5 @@
 import usersStore from '../../store/users-store';
+import { showModal } from '../render-modal/render-modal';
 import './render-table.css';
 
 // def var table
@@ -32,6 +33,26 @@ const createTable = () => {
     return table;
 };
 
+/**
+ * 
+ * @param {MouseEvent} event 
+ */
+const tableSelectListener = ( event ) => {
+    //obtener solo el elemento html cuya clase es .select-user,
+    //del elemento que dispara el evento, la tabla
+    const element = event.target.closest('.select-user');
+    // si el element sobre el que se pulsa no es el Select, dara null, parar
+    if ( !element ) return;
+    // si el elemento si que es el Select
+    // obtener el valor de su atributo data-id, que será el id del user
+    const id = element.getAttribute( 'data-id');
+    // llamar a la func que muestra el modal, enviando el id
+    showModal(id);
+
+}
+
+
+
 
 /**
  * 
@@ -50,7 +71,8 @@ export const renderTable = ( element ) => {
         // la primera estará vacia.
         element.append( table );
 
-        // todo listener a la tabla
+        //listener a toda la tabla
+        table.addEventListener( 'click', (event) => tableSelectListener( event ) );
 
     } 
 
@@ -70,9 +92,9 @@ export const renderTable = ( element ) => {
                 <td>${ user.lastName }</td>
                 <td>${ user.isActive }</td>
                 <td>
-                        <a href="#/" data-id="${ user.id }">Select</a>
+                        <a href="#/" class="select-user" data-id="${ user.id }">Select</a>
                         |
-                        <a href="#/" data-id="${ user.id }">Delete</a>
+                        <a href="#/" class="delete-user" data-id="${ user.id }">Delete</a>
                 </td>
             </tr>
         `;

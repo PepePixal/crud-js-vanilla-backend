@@ -7,7 +7,7 @@ import { User } from '../models/user';
 // retorna el modelo de usuario de la BD .json
 export const userModelToLocalhost = ( user ) => {
 
-    // desestructurar el objeto que viene en user aplicación
+    // desestructurar el objeto que viene en user (modelo aplicación)
     const { 
         avatar,
         balance,

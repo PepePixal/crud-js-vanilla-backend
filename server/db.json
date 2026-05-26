@@ -5,8 +5,8 @@
       "isActive": false,
       "balance": 1397.32,
       "avatar": "http://placehold.it/32x32",
-      "first_name": "Ryan",
-      "last_name": "Kent",
+      "first_name": "Ryan66644",
+      "last_name": "Kent666",
       "gender": "male"
     },
     {
@@ -453,7 +453,7 @@
     {
       "balance": 123,
       "first_name": "nuevo",
-      "isActive": true,
+      "isActive": false,
       "last_name": "user",
       "id": "0N4zS99pLmw"
     },
@@ -463,6 +463,20 @@
       "isActive": false,
       "last_name": "ww",
       "id": "eBSfVGT0Sy4"
+    },
+    {
+      "balance": 2,
+      "first_name": "ee",
+      "isActive": true,
+      "last_name": "rr",
+      "id": "5tv7eUatXzA"
+    },
+    {
+      "balance": 555,
+      "first_name": "xxx",
+      "isActive": false,
+      "last_name": "xxx",
+      "id": "Wm_Rm98WKkM"
     }
   ],
   "$schema": "./node_modules/json-server/schema.json"

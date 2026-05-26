@@ -2,6 +2,7 @@
 // - si recibe un usuario sin id, es un usuario nuevo
 // - si recibe un usuario con id, es una actualización de usurario
 
+import { localhostUserToModel } from '../mappers/localhost-user.mapper.js';
 import { userModelToLocalhost } from '../mappers/user-to-localhost.mapper.js';
 import {User} from '../models/user.js'
 
@@ -16,35 +17,38 @@ export const saveUser = async( userLike ) => {
     // con los datos del objeto recibido en userLike
     const user = new User( userLike );
 
-    // valida si el firts y el last name NO existen
+    // valida si el firts y el last name, NO existen
     if ( !user.firstName || !user.lastName )
         throw 'First & Last name, are required';
     
     // mapear nuestro modelo de user, al modelo de la BD
     const userToSave = userModelToLocalhost( user );
 
-    //* Actualización de usuario existente *//
+    let userUpdated;
 
-    // validar si el usuario recibido ya existía,
-    // si el objeto user recibido YA contiene la propiedad id, es una actualización
+    //** validación para ACTUALIZACIÓN o NUEVO USUARIO */
+    
+    // si el objeto user recibido YA contiene la propiedad id, es una ACTUALIZACIÓN
     if ( user.id ) {
-        throw 'Actualización no implementada';
-        return;
-    }
+        // llama func que actualiza el usuario en la BD,
+        // obtiene el usuario actualizado
+       userUpdated = await updateUser( userToSave );
+    
+    // de lo contrario es un usuario NUEVO   
+    } else {
+        // llama func que registra el usuario en la BD, 
+        // obtiene el nuevo usuario
+        userUpdated = await createUser( userToSave );
+    };
 
-    //* Usuario nuevo *//
+    // mapear el modelo de la BD a nuestro modelo de User y lo retorna
+    return localhostUserToModel( userUpdated );
 
-    // llama func que registra el usuario en la BD y 
-    // obtiene el usuario registrado
-    const updatedUser = await createUser( userToSave );
-
-    // retorna el usuario nuevo registrado
-    return updatedUser;
-};
+}
 
     
 /**
-* Crea user en la BD
+* Crea nuevo user en la BD
 * @param {Like<User>} obj_estructura_de_usuario
 */
 const createUser = async( user ) => {
@@ -64,17 +68,42 @@ const createUser = async( user ) => {
     });
 
     // extrae el body del objeto Response de la petición, a formato objeto JS
-    // obteniendo un nuevo objeto con la data (ususrioa)
+    // obteniendo un nuevo objeto con la data (ususrio)
     const newUser = await res.json();
-
-    console.log({newUser});
+    //console.log({newUser});
 
     return newUser;
-
 };
 
 
+/**
+* Actualiza user ya existente en la BD
+* @param {Like<User>} obj_estructura_de_usuario
+*/
+const updateUser = async( user ) => {
 
+    // definicion de la url 
+    const url = `${ import.meta.env.VITE_BASE_URL }/users/${user.id}`;
+
+    // petición fetch tip POST, que retorna promise y su resolucion (Response),
+    // que asignaremos a res
+    const res = await fetch( url, {
+        method: 'PATCH',
+        //serializar el objeto user a un string JSON, para el body 
+        body: JSON.stringify(user),
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    });
+
+    // extrae el body del objeto Response de la petición, a formato objeto JS
+    // obteniendo un nuevo objeto con la data (usuario)
+    const updatedUser = await res.json();
+    console.log({updatedUser});
+
+    return updatedUser;
+
+};
 
 
 
