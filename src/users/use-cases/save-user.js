@@ -67,8 +67,8 @@ const createUser = async( user ) => {
         }
     });
 
-    // extrae el body del objeto Response de la petición, a formato objeto JS
-    // obteniendo un nuevo objeto con la data (ususrio)
+    // extrae el body del objeto Response de la petición en formato string JSON y 
+    // lo transforma a nuevo objeto JS, con la data (usuario)
     const newUser = await res.json();
     //console.log({newUser});
 
@@ -89,17 +89,17 @@ const updateUser = async( user ) => {
     // que asignaremos a res
     const res = await fetch( url, {
         method: 'PATCH',
-        //serializar el objeto user a un string JSON, para el body 
+        //transforma el objeto JS user, a un string JSON, para el body 
         body: JSON.stringify(user),
         headers: {
             'Content-Type': 'application/json'
         }
     });
 
-    // extrae el body del objeto Response de la petición, a formato objeto JS
-    // obteniendo un nuevo objeto con la data (usuario)
+    // extrae el body del objeto Response de la petición en formato string JSON y 
+    // lo transforma a nuevo objeto JS, con la data (usuario)
     const updatedUser = await res.json();
-    console.log({updatedUser});
+    //console.log(updatedUser);
 
     return updatedUser;
 

@@ -27,14 +27,16 @@ export const UsersApp = async( element ) => {
 
     renderAddButton( element );
 
-    // llama func enviando element donde renderizar y
+    // llama func enviando, element donde renderizar y
     // func callback que recibe el userLike (objeto usuario),
     renderModal( element, async( userLike ) => {
         // llama func que agregará el nuevo userLike en la BD,
         const user = await saveUser( userLike );
         //console.log(user);
+
         // actualiza el userStore con el nuevo user modificado 
         usersStore.onUserChanged( user );
+
         // renderiza la tabla con el nuevo user agregado
         renderTable();
     });

@@ -10,38 +10,28 @@ const state = {
 // funciones
 
 const loadNextPage = async() => {
-
     // llama func que carga la pagina de users desde la BD,
     // enviando la página a cargar
     const users = await loadUsersByPage( state.currentPage + 1);
-
     // valida si NO hay usuarios en la página solicitada, para y retorna
     if ( users.length === 0) return;
-    
     // aumenta el constador de paginas
     state.currentPage += 1;
-    
     // asigna los usuarios cargados a la propiedad users del obj state,
     // para poder obtenerlos en cualquier parte de la aplicación, con getUsers
     state.users = users;
-   
 };
 
 const loadPreviusPage = async() => {
-
     // valida si el número de la pagian actual es 1, retorna
     if ( state.currentPage === 1 ) return;
-
     // llama func que carga la pagina de users desde la BD,
     // enviando la página a cargar
     const users = await loadUsersByPage( state.currentPage - 1);
-
     // actualiza el contador de página
     state.currentPage -= 1;
-
     // asigna los usuarios cargados de la BD, al state del store
     state.users = users;
-
 };
 
 
@@ -50,7 +40,6 @@ const loadPreviusPage = async() => {
  * @param {User} updatedUser 
  */
 const onUserChanged = ( updatedUser ) => {
-
     // def. bandera
     let wasFound = false;
     
@@ -73,12 +62,22 @@ const onUserChanged = ( updatedUser ) => {
     if ( state.users.length < 10 && !wasFound ) {
         state.users.push( updatedUser );
     };
-
 };
 
-const reloadPage = async() => {
-    throw new Error( 'No implementado');
 
+const reloadPage = async() => {
+    // llama func que carga los users por páginación de 10, desde la BD,
+    const users = await loadUsersByPage( state.currentPage );
+    // valida si NO hay usuarios en la página solicitada:
+    if ( users.length === 0) {
+        // carga la página anterior y sale de la func.
+        await loadPreviusPage();
+        return;
+    };
+
+    // asigna los usuarios cargados a la propiedad users del obj state,
+    // para poder obtenerlos en cualquier parte de la aplicación, con getUsers
+    state.users = users;
 };
 
 

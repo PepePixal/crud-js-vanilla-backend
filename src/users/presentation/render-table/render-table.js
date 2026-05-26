@@ -1,4 +1,5 @@
 import usersStore from '../../store/users-store';
+import { deleteUserById } from '../../use-cases/delete-user-by-id';
 import { showModal } from '../render-modal/render-modal';
 import './render-table.css';
 
@@ -48,10 +49,38 @@ const tableSelectListener = ( event ) => {
     const id = element.getAttribute( 'data-id');
     // llamar a la func que muestra el modal, enviando el id
     showModal(id);
-
 }
 
 
+/**
+ * 
+ * @param {MouseEvent} event 
+ */
+const tableDeleteListener = async( event ) => {
+    //obtener solo el elemento html cuya clase es .select-user,
+    //del elemento que dispara el evento, la tabla
+    const element = event.target.closest('.delete-user');
+    // si el element sobre el que se pulsa no es el Select, dara null, parar
+    if ( !element ) return;
+    // si el elemento si que es el Select,
+    // obtener el valor de su atributo data-id, que será el id del user
+    const id = element.getAttribute( 'data-id');
+    
+    // llamar a la func que elimina el usuario por su id, 
+    // controlando el posible error
+    try {
+        //llama func que elimina el uer por su id
+        await deleteUserById(id);
+        // llama func que recarga los usuarios de la página actual
+        await usersStore.reloadPage();
+        document.querySelector('#current-page').innerText = usersStore.getCurrentPage();
+        renderTable();
+
+    } catch (error) {
+        console.log(error);
+        alert('No se pudo eliminar el usuario');
+    }
+}
 
 
 /**
@@ -71,8 +100,10 @@ export const renderTable = ( element ) => {
         // la primera estará vacia.
         element.append( table );
 
-        //listener a toda la tabla
+        //listener a toda la tabla que llama func tableSelectListener()
         table.addEventListener( 'click', (event) => tableSelectListener( event ) );
+        //listener a toda la tabla que llama func tableDeleteListener()
+        table.addEventListener( 'click', (event) => tableDeleteListener( event ) );
 
     } 
 
